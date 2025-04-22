@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Fruitopia</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .payment-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+        .payment-method {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .payment-method:hover {
+            background-color: #f8f9fa;
+        }
+        .payment-method.selected {
+            border-color: #28a745;
+            background-color: #e8f5e9;
+        }
+        .order-summary {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="payment-container">
+            <h2 class="text-center mb-4">Payment Details</h2>
+
+            <!-- Order Summary -->
+            <div class="order-summary">
+                <h4>Order Summary</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart_items %}
+                        <tr>
+                            <td>{{ item.fruit }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>${{ "%.2f"|format(item.price) }}</td>
+                            <td>${{ "%.2f"|format(item.total) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-right"><strong>Total Amount:</strong></td>
+                            <td><strong>${{ "%.2f"|format(total_price) }}</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- Payment Form -->
+            <form id="paymentForm" onsubmit="processPayment(event)">
+                <!-- Delivery Address -->
+                <div class="mb-4">
+                    <h4>Delivery Address</h4>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="fullName" placeholder="Full Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="address" placeholder="Street Address" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control" id="city" placeholder="City" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control" id="pincode" placeholder="PIN Code" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Method Selection -->
+                <h4>Select Payment Method</h4>
+                <div class="payment-methods">
+                    <div class="payment-method" onclick="selectPaymentMethod('card')">
+                        <input type="radio" name="paymentMethod" value="card" required>
+                        <label>Credit/Debit Card</label>
+                    </div>
+                    <div class="payment-method" onclick="selectPaymentMethod('upi')">
+                        <input type="radio" name="paymentMethod" value="upi" required>
+                        <label>UPI Payment</label>
+                    </div>
+                    <div class="payment-method" onclick="selectPaymentMethod('cod')">
+                        <input type="radio" name="paymentMethod" value="cod" required>
+                        <label>Cash on Delivery</label>
+                    </div>
+                </div>
+
+                <!-- Card Payment Details (shown/hidden based on selection) -->
+                <div id="cardDetails" style="display: none;">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="cardNumber" placeholder="Card Number">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control" id="cvv" placeholder="CVV">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- UPI Payment Details -->
+                <div id="upiDetails" style="display: none;">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="upiId" placeholder="UPI ID">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block mt-4">Place Order</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function selectPaymentMethod(method) {
+            // Hide all payment detail sections
+            document.getElementById('cardDetails').style.display = 'none';
+            document.getElementById('upiDetails').style.display = 'none';
+
+            // Show selected payment detail section
+            if (method === 'card') {
+                document.getElementById('cardDetails').style.display = 'block';
+            } else if (method === 'upi') {
+                document.getElementById('upiDetails').style.display = 'block';
+            }
+
+            // Update selected payment method styling
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+        }
+
+        function processPayment(event) {
+            event.preventDefault();
+            
+            // Get form data
+            const formData = {
+                fullName: document.getElementById('fullName').value,
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+                pincode: document.getElementById('pincode').value,
+                paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value
+            };
+
+            // Send payment data to server
+            fetch('/process_payment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Order placed successfully!');
+                    window.location.href = '/order_confirmation';
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to process payment. Please try again.');
+            });
+        }
+    </script>
+</body>
+</html> 

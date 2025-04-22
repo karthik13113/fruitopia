@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  
+  <title>Fruitopia - Services</title>
+
+  <!-- Correct Flask Static Paths -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}" />
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}" />
+</head>
+
+<body>
+  <div class="hero_area sub_pages">
+    <header class="header_section">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg custom_nav-container pt-3">
+          <a class="navbar-brand" href="/">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Fruitopia Logo" />
+            <span>Fruitopia</span>
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Home</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('fruits') }}">Fruit</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('services') }}">Services</a></li>
+              <li class="nav-item active"><a class="nav-link" href="{{ url_for('contact') }}">Contact Us</a></li>
+            </ul>
+            
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- End Header Section -->
+  </div>
+  </div>
+
+  <section class="service_section layout_padding">
+    <div class="container">
+        <h2 class="custom_heading">Our Fresh Fruits</h2>
+        <div class="layout_padding2">
+            <div class="row">
+                <!-- Orange -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <img class="card-img-top" src="{{ url_for('static', filename='images/orange.png') }}" alt="Orange">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Orange</h5>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- Apple -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <img class="card-img-top" src="{{ url_for('static', filename='images/apple.png') }}" alt="Apple">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Apple</h5>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- Banana -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <img class="card-img-top" src="{{ url_for('static', filename='images/banana.png') }}" alt="Banana">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Banana</h5>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- Kiwi -->
+                <div class="col-md-4">
+                    <div class="card mt-4">
+                        <img class="card-img-top" src="{{ url_for('static', filename='images/kiwi.png') }}" alt="Kiwi">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Kiwi</h5>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- Add other fruits similarly -->
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+  <!-- Correct Flask JS Paths -->
+  <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+<!-- Footer section -->
+<section class="container-fluid footer_section">
+  <p>
+    Copyright &copy; 2025 All Rights Reserved By
+    <a href="https://html.design/">Karthik M</a>
+  </p>
+</section>
+<!-- End footer section -->
+
+</body>
+</html>

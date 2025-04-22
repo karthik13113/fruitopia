@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - Fruitopia</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container text-center mt-5">
+        <div class="alert alert-success">
+            <h2>🎉 Thank You for Your Order!</h2>
+            <p>Your order has been successfully placed.</p>
+            <p>You will receive a confirmation email shortly.</p>
+        </div>
+        <a href="{{ url_for('index') }}" class="btn btn-primary">Continue Shopping</a>
+    </div>
+</body>
+</html> 
